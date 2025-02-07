@@ -3,7 +3,13 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "vnet_rg" {
-  name = var.resourcegroup_name
+  name = var.resourcegroup_name_network
+  location = var.location
+  tags = var.tags
+}
+
+resource "azurerm_resource_group" "shared_services_rg" {
+  name = var.resourcegroup_name_shared_services
   location = var.location
   tags = var.tags
 }

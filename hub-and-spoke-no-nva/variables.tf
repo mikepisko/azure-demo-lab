@@ -1,7 +1,13 @@
-variable "resourcegroup_name" {
+variable "resourcegroup_name_network" {
     type = string
     description = "The name of the resource group to create"
     default = "rg-lab-vnet-use2"
+}
+
+variable "resourcegroup_name_shared_services" {
+    type = string
+    description = "The name of the resource group to create"
+    default = "rg-lab-shared-services-use2"
 }
 
 variable "location" {
