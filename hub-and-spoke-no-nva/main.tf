@@ -1,5 +1,8 @@
-provider "azurerm" {
-  features {}
+resource "random_string" "unique" {
+  length  = 6
+  upper   = false
+  special = false
+  lower   = true
 }
 
 resource "azurerm_resource_group" "vnet_rg" {
@@ -83,4 +86,13 @@ resource "azurerm_virtual_network_peering" "vnet2-to-vnet1" {
   remote_virtual_network_id = azurerm_virtual_network.vnet1.id
   allow_virtual_network_access = true
   allow_forwarded_traffic      = true 
+}
+
+module "storage-account" {
+  depends_on = [
+    azurerm_resource_group.shared_services_rg
+  ]
+  source = "../modules/storage-account"
+  resourcegroup_name = azurerm_resource_group.shared_services_rg.name
+  random_string       = random_string.unique.result
 }
