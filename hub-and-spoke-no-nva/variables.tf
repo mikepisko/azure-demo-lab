@@ -10,6 +10,12 @@ variable "resourcegroup_name_shared_services" {
     default = "rg-lab-shared-services-use2"
 }
 
+variable "resourcegroup_name_dns_services" {
+    type = string
+    description = "The name of the resource group to create"
+    default = "rg-lab-dns-services-use2"
+}
+
 variable "location" {
     type = string
     description = "The location/region where the resource group will be created"

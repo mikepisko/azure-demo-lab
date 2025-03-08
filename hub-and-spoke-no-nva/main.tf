@@ -17,6 +17,12 @@ resource "azurerm_resource_group" "shared_services_rg" {
   tags = var.tags
 }
 
+resource "azurerm_resource_group" "dns_services_rg" {
+  name = var.resourcegroup_name_dns_services
+  location = var.location
+  tags = var.tags
+}
+
 resource "azurerm_virtual_network" "vnet1" {
   name = var.vnet1_name
   resource_group_name = azurerm_resource_group.vnet_rg.name
@@ -25,25 +31,25 @@ resource "azurerm_virtual_network" "vnet1" {
   location = var.location
 }
 
-resource "azurerm_public_ip" "Bastion_PIP" {
-  name                = "AzureBastionPublicIP"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.vnet_rg.name
-  allocation_method   = "Static"
-  sku                 = "Standard"
-}
+# resource "azurerm_public_ip" "Bastion_PIP" {
+#   name                = "AzureBastionPublicIP"
+#   location            = var.location
+#   resource_group_name = azurerm_resource_group.vnet_rg.name
+#   allocation_method   = "Static"
+#   sku                 = "Standard"
+# }
 
-resource "azurerm_bastion_host" "AzureBastion" {
-  name                = "LabBastionHost"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.vnet_rg.name
-
-  ip_configuration {
-    name                 = "configuration"
-    subnet_id            = azurerm_subnet.vnet1_subnets_address_space["bastion_subnet"].id
-    public_ip_address_id = azurerm_public_ip.Bastion_PIP.id
-  }
-}
+# resource "azurerm_bastion_host" "AzureBastion" {
+#   name                = "LabBastionHost"
+#   location            = var.location
+#   resource_group_name = azurerm_resource_group.vnet_rg.name
+#
+#   ip_configuration {
+#     name                 = "configuration"
+#     subnet_id            = azurerm_subnet.vnet1_subnets_address_space["bastion_subnet"].id
+#     public_ip_address_id = azurerm_public_ip.Bastion_PIP.id
+#   }
+# }
 
 resource "azurerm_subnet" "vnet1_subnets_address_space" {
   for_each = var.vnet1_subnets
@@ -61,7 +67,7 @@ resource "azurerm_virtual_network" "vnet2" {
   address_space = var.vnet2_address_space
 }
 
-resource "azurerm_subnet" "vnet2_subnet1_address_space" {
+resource "azurerm_subnet" "vnet2_subnets_address_space" {
   for_each = var.vnet2_subnets
   resource_group_name  = azurerm_resource_group.vnet_rg.name
   virtual_network_name = azurerm_virtual_network.vnet2.name
@@ -95,4 +101,14 @@ module "storage-account" {
   source = "../modules/storage-account"
   resourcegroup_name = azurerm_resource_group.shared_services_rg.name
   random_string       = random_string.unique.result
+}
+
+module "private-dns-zone" {
+  depends_on = [
+    azurerm_resource_group.dns_services_rg,
+    azurerm_virtual_network.vnet1
+  ]
+  source = "../modules/dns/private-dns-zone"
+  resourcegroup_name = azurerm_resource_group.dns_services_rg.name
+  virtual_network_id = azurerm_virtual_network.vnet1.id
 }
