@@ -47,16 +47,22 @@ variable "vnet1_subnets" {
     type = map(any)
     description = "The name of the subnet to create"
     default = {
+        # The name of the subnet mut be AzureBastionSubnet
+        bastion_subnet = {
+            name = "AzureBastionSubnet"
+            address_prefixes = ["10.0.0.0/26"]} 
         subnet1 = {
             name = "subnet-10.0.0.64_26-pe-subnet-lab-use2"
             address_prefixes = ["10.0.0.64/26"]}
         subnet2 = {
             name = "subnet-10.0.0.128_26-vm-subnet-lab-use2"
             address_prefixes = ["10.0.0.128/26"]}
-        # The name of the subnet mut be AzureBastionSubnet
-        bastion_subnet = {
-            name = "AzureBastionSubnet"
-            address_prefixes = ["10.0.0.0/26"]}
+        subnet3 = {
+            name = "subnet-10.0.0.192_27-inbound-endpoint-lab-use2"
+            address_prefixes = ["10.0.0.192/27"]}
+        subnet4 = {
+            name = "subnet-10.0.0.224_27-outbound-endpoint-lab-use2"
+            address_prefixes = ["10.0.0.224/27"]}
             }
 }
 
