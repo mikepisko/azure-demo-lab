@@ -10,8 +10,8 @@ variable "inbound_endpoint_name" {
   default = "inboundendpointuse2"
 }
 
-variable "inbound_endpoint_subnetId" {
-  description = "The ID of the subnet to use for the inbound endpoint"
+variable "inbound_subnet_id" {
+  description = "Subnet ID for the inbound endpoint"
   type        = string
 }
 
@@ -21,8 +21,8 @@ variable "outbound_endpoint_name" {
   default     = "outboundendpointuse2"
 }
 
-variable "outbound_endpoint_subnetId" {
-  description = "The ID of the subnet to use for the outbound endpoint"
+variable "outbound_subnet_id" {
+  description = "Subnet ID for the outbound endpoint"
   type        = string
 }
 
